@@ -12,7 +12,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Orbitron', sans-serif;
     background-color: #050508;
     background-image: 
         radial-gradient(at 20% 20%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
@@ -41,7 +41,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(10, 10, 15, 0.5);
+    background: rgba(10, 10, 15, 0.6);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -59,14 +59,12 @@ body {
     cursor: pointer;
 }
 
-.controls {
+.search-container {
     display: flex;
-    gap: 8px;
     align-items: center;
-    flex-wrap: wrap;
 }
 
-.controls input {
+.search-container input {
     padding: 8px 15px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
@@ -76,20 +74,44 @@ body {
     transition: 0.3s;
 }
 
-.controls input:focus {
+.search-container input:focus {
     border-color: #06b6d4;
     box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
 }
 
+/* Category Filter Controls Section Below Hero */
+.controls-wrapper {
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.controls {
+    display: inline-flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+}
+
 .controls button {
-    padding: 8px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     color: #cbd5e1;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: capitalize;
+    font-weight: 500;
 }
 
 .controls button:hover, .controls button.active {
@@ -102,7 +124,7 @@ body {
 
 /* Hero Section */
 .hero {
-    height: 100vh;
+    height: 75vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,8 +176,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
-    padding: 100px 40px 60px 40px;
-    scroll-margin-top: 80px;
+    padding: 40px 40px 60px 40px;
+    scroll-margin-top: 100px;
     flex: 1;
 }
 
@@ -191,12 +213,12 @@ body {
     width: 100%;
     padding: 30px;
     text-align: center;
-    background: rgba(10, 10, 15, 0.6);
+    background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
-    margin-top: 40px;
+    margin-top: auto;
 }
 
 .footer-text {
@@ -248,40 +270,43 @@ body {
 .next { right: 40px; }
 
 /* Responsive adjustments */
-@media(max-width: 1024px) {
+@media(max-width: 768px) {
     .navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-        position: relative;
+        padding: 15px 20px;
     }
-    .hero { height: auto; padding: 100px 20px; }
-    .gallery { padding-top: 40px; }
+    .hero h1 { font-size: 3rem; }
+    .hero p { font-size: 1.1rem; }
+    .gallery { padding: 20px; }
 }
 </style>
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">🌌 Galaxy Gallery</div>
-    <div class="controls" id="filterControls">
+    <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">🌌 RH Nexus Gallery</div>
+    <div class="search-container">
         <input id="search" placeholder="Search category...">
-        <button class="active" onclick="filterGallery('all', this)">All</button>
     </div>
 </nav>
 
 <section class="hero">
-    <h1>Galaxy Images</h1>
-    <p>Explore beautiful curated themes in a Premium 3D Workspace Gallery</p>
-    <button class="start-btn" onclick="document.getElementById('gallerySection').scrollIntoView({behavior:'smooth'})">
+    <h1>RH Nexus IMAGES</h1>
+    <p>VISUAL GALLERY . LIVE IMAGES . CURATED COLLECTION . IMMPERSIVE EXPERINCE</p>
+    <button class="start-btn" onclick="document.getElementById('controlsSection').scrollIntoView({behavior:'smooth'})">
         Explore Gallery
     </button>
 </section>
 
+<div class="controls-wrapper" id="controlsSection">
+    <div class="controls" id="filterControls">
+        <button class="active" onclick="filterGallery('all', this)">All</button>
+    </div>
+</div>
+
 <div class="gallery" id="gallerySection"></div>
 
 <footer class="gallery-footer">
-    <div class="footer-text">galaxy images ,@Gallery,</div>
+    <div class="footer-text">RH Nexus Gallery : via unsplash : @2026</div>
 </footer>
 
 <div class="lightbox" id="lightbox">
@@ -292,27 +317,25 @@ body {
 </div>
 
 <script>
-// 10 distinct architectural, nature, and tech categories with exactly 5 unique image IDs each (Total 50 images)
+// 10 distinct categories with exactly 5 unique image IDs each (Total 50 images)
 const categoryImageIds = {
     nature: [
         'photo-1470071459604-3b5ec3a7fe05', 'photo-1447752875215-b2761acb3c5d', 
-        'photo-1441974231531-c6227db76b6e', 'photo-1472214222541-d510753a4707', 'photo-1501854140801-50d01698950b'
+        'photo-1441974231531-c6227db76b6e', 'photo-1501854140801-50d01698950b'
     ],
     city: [
         'photo-1477959858617-67f85cf4f1df', 'photo-1449034446853-66c86144b0ad',
         'photo-1486406146926-c627a92ad1ab', 'photo-1476514525535-07fb3b4ae5f1', 'photo-1514565131-fce0801e5785'
     ],
     animals: [
-        'photo-1474511320721-9a53616330d6', 'photo-1533738363-b7f9aef128ce',
-        'photo-1546182990-dffeafbe841d', 'photo-1526336028067-849a9d758894', 'photo-1564349683136-77e08dba1ef7'
+        'photo-1533738363-b7f9aef128ce','photo-1546182990-dffeafbe841d', 'photo-1564349683136-77e08dba1ef7'
     ],
     birds: [
         'photo-1444464666168-49d633b86797', 'photo-1552410260-0fd9b577afa6',
-        'photo-1516233593474-7500d685d384', 'photo-1452570053594-1b985d6ea890', 'photo-1606567595334-d39972c85dbe'
+        'photo-1452570053594-1b985d6ea890', 'photo-1606567595334-d39972c85dbe'
     ],
     cars: [
-        'photo-1503376780353-7e6692767b70', 'photo-1525609004556-c46c7d6cf0a3',
-        'photo-1542282088-fe8426682b8f', 'photo-1552519507-da3b142c6e3d', 'photo-1580273916550-e323be2ae537'
+        'photo-1503376780353-7e6692767b70','photo-1542282088-fe8426682b8f', 'photo-1552519507-da3b142c6e3d', 'photo-1580273916550-e323be2ae537'
     ],
     bikes: [
         'photo-1558981806-ec527fa84c39', 'photo-1568772585407-9361f9bf3a87',
@@ -339,8 +362,9 @@ const categoryImageIds = {
 const gallery = document.getElementById('gallerySection');
 const filterControls = document.getElementById('filterControls');
 let images = [];
+let visibleImages = [];
 
-// Dynamically generate navbar action buttons for all 10 categories
+// Dynamically generate navigation filter buttons cleanly
 Object.keys(categoryImageIds).forEach(cat => {
     let btn = document.createElement('button');
     btn.textContent = cat;
@@ -348,20 +372,28 @@ Object.keys(categoryImageIds).forEach(cat => {
     filterControls.appendChild(btn);
 });
 
-// Render the gallery loop structural grid (10 categories * 5 items = 50 individual unique components)
+// Render layout grid tracking indices correctly
 Object.keys(categoryImageIds).forEach(cat => {
     categoryImageIds[cat].forEach(id => {
         let url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=80`;
-        
         images.push({ url, cat });
-        
-        let card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.category = cat;
-        card.innerHTML = `<img src="${url}" data-index="${images.length - 1}" alt="${cat}" loading="lazy">`;
-        gallery.appendChild(card);
     });
 });
+
+// Initialize active view tracking
+visibleImages = [...images];
+
+function renderCards() {
+    gallery.innerHTML = '';
+    visibleImages.forEach((img, index) => {
+        let card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.category = img.cat;
+        card.innerHTML = `<img src="${img.url}" data-index="${index}" alt="${img.cat}" loading="lazy">`;
+        gallery.appendChild(card);
+    });
+}
+renderCards();
 
 let current = 0;
 const lightbox = document.getElementById('lightbox');
@@ -371,21 +403,22 @@ gallery.addEventListener('click', e => {
     if (e.target.tagName === 'IMG') {
         current = parseInt(e.target.dataset.index);
         lightbox.style.display = 'flex';
-        bigImg.src = images[current].url;
+        bigImg.src = visibleImages[current].url;
     }
 });
 
 function closeBox() { lightbox.style.display = 'none'; }
 function next() {
-    current = (current + 1) % images.length;
-    bigImg.src = images[current].url;
+    if(visibleImages.length === 0) return;
+    current = (current + 1) % visibleImages.length;
+    bigImg.src = visibleImages[current].url;
 }
 function prev() {
-    current = (current - 1 + images.length) % images.length;
-    bigImg.src = images[current].url;
+    if(visibleImages.length === 0) return;
+    current = (current - 1 + visibleImages.length) % visibleImages.length;
+    bigImg.src = visibleImages[current].url;
 }
 
-// Close lightbox on wrapper background space strike
 lightbox.addEventListener('click', (e) => {
     if(e.target === lightbox) closeBox();
 });
@@ -393,17 +426,22 @@ lightbox.addEventListener('click', (e) => {
 function filterGallery(cat, btn) {
     document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
     if(btn) btn.classList.add('active');
+    document.getElementById('search').value = '';
 
-    document.querySelectorAll('.card').forEach(c => {
-        c.style.display = (cat === 'all' || c.dataset.category === cat) ? 'block' : 'none';
-    });
+    if (cat === 'all') {
+        visibleImages = [...images];
+    } else {
+        visibleImages = images.filter(img => img.cat === cat);
+    }
+    renderCards();
 }
 
 document.getElementById('search').addEventListener('input', function() {
     let v = this.value.toLowerCase();
-    document.querySelectorAll('.card').forEach(c => {
-        c.style.display = c.dataset.category.includes(v) ? 'block' : 'none';
-    });
+    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+    
+    visibleImages = images.filter(img => img.cat.includes(v));
+    renderCards();
 });
 </script>
 </body>
