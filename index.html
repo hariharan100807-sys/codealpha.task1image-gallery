@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Galaxy Images Premium 3D Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RH Nexus Premium 3D Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 <style>
 * {
     margin: 0;
@@ -12,19 +13,17 @@
 }
 
 body {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Rajdhani', sans-serif;
     background-color: #050508;
     background-image: 
-        radial-gradient(at 20% 20%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
-        radial-gradient(at 80% 40%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-        radial-gradient(at 40% 80%, rgba(147, 51, 234, 0.15) 0px, transparent 50%);
+        radial-gradient(at 20% 20%, rgba(79, 70, 229, 0.12) 0px, transparent 50%),
+        radial-gradient(at 80% 40%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+        radial-gradient(at 40% 80%, rgba(147, 51, 234, 0.12) 0px, transparent 50%);
     background-attachment: fixed;
     background-size: 200% 200%;
     animation: ambientSpace 20s ease infinite;
     color: white;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
 }
 
@@ -34,6 +33,88 @@ body {
     100% { background-position: 0% 50% }
 }
 
+/* LANDING PAGE (FRONT PAGE) STYLE */
+#landing-view {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    padding: 20px;
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s;
+}
+
+#landing-view.hide {
+    transform: translateY(-100vh);
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    display: none !important; /* Force layout removal to prevent empty spacing */
+}
+
+.landing-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 5.5rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    background: linear-gradient(to right, #06b6d4, #9333ea, #f43f5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 30px rgba(6, 182, 212, 0.4));
+    animation: float 4s infinite ease-in-out;
+}
+
+.landing-subtitle {
+    font-size: 1.4rem;
+    margin: 25px 0 40px 0;
+    color: #94a3b8;
+    letter-spacing: 6px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.enter-btn {
+    font-family: 'Orbitron', sans-serif;
+    padding: 18px 50px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    background: linear-gradient(45deg, #06b6d4, #9333ea);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 25px rgba(6, 182, 212, 0.4);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    letter-spacing: 2px;
+}
+
+.enter-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 0 40px rgba(6, 182, 212, 0.8), 0 0 20px rgba(147, 51, 234, 0.5);
+}
+
+/* MAIN GALLERY VIEW (HIDDEN BY DEFAULT) */
+#main-gallery-view {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.8s ease-in;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#main-gallery-view.show {
+    display: flex;
+    opacity: 1;
+}
+
 /* Glassmorphism Sticky Navbar */
 .navbar {
     position: fixed;
@@ -41,7 +122,7 @@ body {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(10, 10, 15, 0.6);
+    background: rgba(10, 10, 15, 0.7);
     backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -53,15 +134,17 @@ body {
 }
 
 .nav-logo {
-    font-size: 1.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
     font-weight: bold;
     text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
     cursor: pointer;
 }
 
-.search-container {
+.nav-right-controls {
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
 .search-container input {
@@ -72,6 +155,7 @@ body {
     color: white;
     outline: none;
     transition: 0.3s;
+    font-family: inherit;
 }
 
 .search-container input:focus {
@@ -79,165 +163,218 @@ body {
     box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
 }
 
-/* Category Filter Controls Section Below Hero */
-.controls-wrapper {
-    max-width: 1200px;
-    margin: 40px auto 0 auto;
-    padding: 0 20px;
-    width: 100%;
-    text-align: center;
+/* Custom Top Right Categories Dropdown Options */
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
 
-.controls {
-    display: inline-flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 30px;
-}
-
-.controls button {
-    padding: 8px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
-    color: #cbd5e1;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: capitalize;
-    font-weight: 500;
-}
-
-.controls button:hover, .controls button.active {
-    background: linear-gradient(45deg, #06b6d4, #9333ea);
+.dropbtn {
+    background: rgba(255, 255, 255, 0.06);
     color: white;
-    border-color: transparent;
-    box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-    transform: translateY(-2px);
-}
-
-/* Hero Section */
-.hero {
-    height: 75vh;
+    padding: 8px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    cursor: pointer;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    padding-top: 80px;
+    gap: 8px;
+    transition: 0.3s;
+    font-family: 'Orbitron', sans-serif;
 }
 
-.hero h1 {
-    font-size: 5rem;
-    background: linear-gradient(to right, #06b6d4, #9333ea, #f43f5e);
+.dropbtn:hover {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: rgba(10, 10, 18, 0.95);
+    min-width: 180px;
+    box-shadow: 0px 8px 25px 0px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    z-index: 1001;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.dropdown-content a {
+    color: #cbd5e1;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.95rem;
+    transition: 0.2s;
+    text-transform: capitalize;
+}
+
+.dropdown-content a:hover {
+    background: linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(147, 51, 234, 0.2));
+    color: #fff;
+    padding-left: 22px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* TOP AUTOPLAY SLIDESHOW SYSTEM STYLE */
+.slideshow-wrapper {
+    margin-top: 100px;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.slideshow-container {
+    max-width: 100%;
+    height: 320px;
+    position: relative;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.slide-item {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65);
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    color: white;
+    z-index: 5;
+}
+
+.slide-caption h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    background: linear-gradient(45deg, #06b6d4, #f43f5e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 20px rgba(6, 182, 212, 0.3));
-    animation: float 4s infinite ease-in-out;
 }
 
-.hero p {
-    font-size: 1.3rem;
-    margin: 20px;
-    color: #94a3b8;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0) }
-    50% { transform: translateY(-15px) }
-}
-
-.start-btn {
-    padding: 15px 40px;
+.slide-caption p {
     font-size: 1.1rem;
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    background: linear-gradient(45deg, #06b6d4, #9333ea);
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
-    transition: .4s;
+    color: #cbd5e1;
+    margin-top: 5px;
 }
 
-.start-btn:hover {
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
-}
-
-/* 3D Premium Gallery Grid */
+/* 3D Premium Dynamic Gallery Grid Grid setup */
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 40px 40px 60px 40px;
-    scroll-margin-top: 100px;
+    gap: 35px;
+    padding: 50px 40px;
     flex: 1;
 }
 
 .card {
     overflow: hidden;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    transition: transform 0.5s, box-shadow 0.5s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    /* FIXED TRANSITION TYPO BELOW: Changed 0.16. 1 to 0.16, 1 */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(6, 182, 212, 0.3);
-    box-shadow: 0 15px 35px rgba(6, 182, 212, 0.15);
+    transform: translateY(-8px);
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 20px 40px rgba(6, 182, 212, 0.15);
+}
+
+.img-container {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
 }
 
 .card img {
     width: 100%;
-    height: 280px;
+    height: 100%;
     object-fit: cover;
-    transition: .8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.card img:hover {
-    transform: perspective(1000px) rotateY(12deg) rotateX(8deg) scale(1.05);
+.card:hover img {
+    transform: perspective(1000px) rotateY(6deg) rotateX(4deg) scale(1.05);
 }
 
-/* Premium Footer */
+/* Image text information block below individual card design */
+.card-info {
+    padding: 15px;
+    background: rgba(10, 10, 15, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #f1f5f9;
+    text-transform: capitalize;
+}
+
+.card-tag {
+    font-size: 0.8rem;
+    color: #06b6d4;
+    text-transform: uppercase;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* Premium Footer layout */
 .gallery-footer {
     width: 100%;
-    padding: 30px;
+    padding: 25px;
     text-align: center;
-    background: rgba(10, 10, 15, 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 8, 12, 0.9);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
     margin-top: auto;
 }
 
 .footer-text {
-    font-size: 1.4rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
     font-weight: 500;
     letter-spacing: 1px;
     background: linear-gradient(45deg, #06b6d4, #9333ea);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 10px rgba(6, 182, 212, 0.2));
 }
 
-/* Lightbox Styling */
+/* Lightbox view modal context overlay style */
 .lightbox {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(5, 5, 8, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(4, 4, 6, 0.97);
+    backdrop-filter: blur(15px);
     justify-content: center;
     align-items: center;
     z-index: 9999;
@@ -245,9 +382,24 @@ body {
 
 .lightbox img {
     max-width: 85%;
-    max-height: 80%;
-    border-radius: 10px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    max-height: 75%;
+    border-radius: 12px;
+    box-shadow: 0 0 60px rgba(6, 182, 212, 0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.lightbox-caption {
+    position: absolute;
+    bottom: 40px;
+    text-align: center;
+    width: 100%;
+}
+
+.lightbox-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    letter-spacing: 2px;
 }
 
 .nav, .close {
@@ -261,186 +413,341 @@ body {
 }
 
 .nav:hover, .close:hover {
-    color: white;
-    text-shadow: 0 0 10px white;
+    color: #06b6d4;
+    text-shadow: 0 0 15px #06b6d4;
 }
 
 .close { top: 30px; right: 40px; }
 .prev { left: 40px; }
 .next { right: 40px; }
 
-/* Responsive adjustments */
+/* Responsive break configurations */
 @media(max-width: 768px) {
-    .navbar {
-        padding: 15px 20px;
-    }
-    .hero h1 { font-size: 3rem; }
-    .hero p { font-size: 1.1rem; }
-    .gallery { padding: 20px; }
+    .navbar { padding: 15px 20px; }
+    .landing-title { font-size: 3.2rem; }
+    .landing-subtitle { font-size: 1rem; letter-spacing: 3px; }
+    .slideshow-wrapper { padding: 0 20px; margin-top: 90px; }
+    .slideshow-container { height: 220px; }
+    .slide-caption h2 { font-size: 1.6rem; }
+    .gallery { padding: 20px; gap: 20px; }
+    .search-container input { width: 140px; }
 }
 </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">🌌 RH Nexus Gallery</div>
-    <div class="search-container">
-        <input id="search" placeholder="Search category...">
-    </div>
-</nav>
-
-<section class="hero">
-    <h1>RH Nexus IMAGES</h1>
-    <p>VISUAL GALLERY . LIVE IMAGES . CURATED COLLECTION . IMMPERSIVE EXPERINCE</p>
-    <button class="start-btn" onclick="document.getElementById('controlsSection').scrollIntoView({behavior:'smooth'})">
-        Explore Gallery
-    </button>
-</section>
-
-<div class="controls-wrapper" id="controlsSection">
-    <div class="controls" id="filterControls">
-        <button class="active" onclick="filterGallery('all', this)">All</button>
-    </div>
+<div id="landing-view">
+    <h1 class="landing-title">RH Nexus Gallery</h1>
+    <p class="landing-subtitle">PREMIUM 3D VISUALS &amp; IMMERSIVE EXPERIENCES</p>
+    <button class="enter-btn" onclick="activateGalleryView()">EXPLORE GALLERY</button>
 </div>
 
-<div class="gallery" id="gallerySection"></div>
+<div id="main-gallery-view">
+    <nav class="navbar">
+        <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">🌌 RH Nexus</div>
+        
+        <div class="nav-right-controls">
+            <div class="search-container">
+                <input id="search" placeholder="Search categories...">
+            </div>
+            
+            <div class="dropdown">
+                <button class="dropbtn">Categories ▾</button>
+                <div class="dropdown-content" id="dropdownCategories">
+                    <a href="#" onclick="filterGallery('all')">All Images</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<footer class="gallery-footer">
-    <div class="footer-text">RH Nexus Gallery : via unsplash : @2026</div>
-</footer>
+    <div class="slideshow-wrapper">
+        <div class="slideshow-container" id="slideshowContainer"></div>
+    </div>
+
+    <div class="gallery" id="gallerySection"></div>
+
+    <footer class="gallery-footer">
+        <div class="footer-text">RH Nexus Gallery © 2026 • Powered by Unsplash API Engine</div>
+    </footer>
+</div>
 
 <div class="lightbox" id="lightbox">
     <span class="close" onclick="closeBox()">✖</span>
     <span class="nav prev" onclick="prev()">❮</span>
-    <img id="bigImg" alt="Enlarged view">
+    <img id="bigImg" alt="Enlarged gallery view">
+    <div class="lightbox-caption">
+        <div class="lightbox-title" id="lightboxTitle">Image Title</div>
+    </div>
     <span class="nav next" onclick="next()">❯</span>
 </div>
 
 <script>
-// 10 distinct categories with exactly 5 unique image IDs each (Total 50 images)
+// 10 Distinct Categories with Exactly 10 Unique Image IDs Each (Total 100 images)
 const categoryImageIds = {
     nature: [
-        'photo-1470071459604-3b5ec3a7fe05', 'photo-1447752875215-b2761acb3c5d', 
-        'photo-1441974231531-c6227db76b6e', 'photo-1501854140801-50d01698950b'
+        { id: 'photo-1470071459604-3b5ec3a7fe05', name: 'Mystic Mountain Wilderness' },
+        { id: 'photo-1447752875215-b2761acb3c5d', name: 'Deep Forest Path' },
+        { id: 'photo-1441974231531-c6227db76b6e', name: 'Sunlight Through Canopies' },
+        { id: 'photo-1501854140801-50d01698950b', name: 'Rolling Green Meadows' },
+        { id: 'photo-1441974231531-c6227db76b6e', name: 'Peaceful Valley Stream' },
+        { id: 'photo-1469474968028-56623f02e42e', name: 'Highlands Adventure View' },
+        { id: 'photo-1506744038136-46273834b3fb', name: 'Yosemite Alpine River' },
+        { id: 'photo-1446776811953-b23d57bd21aa', name: 'Misty Wilderness Woods' },
+        { id: 'photo-1475924156734-496f6cac6ec1', name: 'Vibrant Solitude Sunset' },
+        { id: 'photo-1513836279014-a89f7a76ae86', name: 'Sprawling Natural Ecosystem' }
     ],
     city: [
-        'photo-1477959858617-67f85cf4f1df', 'photo-1449034446853-66c86144b0ad',
-        'photo-1486406146926-c627a92ad1ab', 'photo-1476514525535-07fb3b4ae5f1', 'photo-1514565131-fce0801e5785'
+        { id: 'photo-1477959858617-67f85cf4f1df', name: 'Metropolitan Night Skyline' },
+        { id: 'photo-1449034446853-66c86144b0ad', name: 'Golden Gate Bridge Perspective' },
+        { id: 'photo-1486406146926-c627a92ad1ab', name: 'Corporate Glass Skyscrapers' },
+        { id: 'photo-1476514525535-07fb3b4ae5f1', name: 'Vibrant City Streets' },
+        { id: 'photo-1514565131-fce0801e5785', name: 'Cyberpunk Blue Atmosphere' },
+        { id: 'photo-1496442226666-8d4d0e62e6e9', name: 'Times Square Lights' },
+        { id: 'photo-1519501025264-65ba15a82390', name: 'Tokyo Neon Grid' },
+        { id: 'photo-1477346611705-65d1883cee1e', name: 'Suburban Architecture Flow' },
+        { id: 'photo-1477959858617-67f85cf4f1df', name: 'Classic London Sunset' },
+        { id: 'photo-1499856871958-5b9627545d1a', name: 'Historic Paris Overview' }
     ],
     animals: [
-        'photo-1533738363-b7f9aef128ce','photo-1546182990-dffeafbe841d', 'photo-1564349683136-77e08dba1ef7'
+        { id: 'photo-1533738363-b7f9aef128ce', name: 'Stylish Cool Cat' },
+        { id: 'photo-1546182990-dffeafbe841d', name: 'Majestic Apex Lion' },
+        { id: 'photo-1564349683136-77e08dba1ef7', name: 'Giant Panda Relaxing' },
+        { id: 'photo-1474511320723-9a56873867b5', name: 'Curious Red Fox' },
+        { id: 'photo-1543466835-00a7907e9de1', name: 'Playful Golden Retriever' },
+        { id: 'photo-1557050543-4d5f4e07ef46', name: 'Wild Elephant Patrol' },
+        { id: 'photo-1522069169874-c58ec4b76be5', name: 'Stately White Stag' },
+        { id: 'photo-1517849845537-4d257902454a', name: 'Domistic Dog' },
+        { id: 'photo-1484406566174-9da000fda645', name: 'Graceful Woodland Deer' },
+        { id: 'photo-1557008075-7f2c5efa4cfd', name: 'Camouflaged Tiger Stalk' }
     ],
     birds: [
-        'photo-1444464666168-49d633b86797', 'photo-1552410260-0fd9b577afa6',
-        'photo-1452570053594-1b985d6ea890', 'photo-1606567595334-d39972c85dbe'
+        { id: 'photo-1444464666168-49d633b86797', name: 'Exotic Passerine Perch' },
+        { id: 'photo-1452570053594-1b985d6ea890', name: 'Two Graceful Macaws' },
+        { id: 'photo-1606567595334-d39972c85dbe', name: 'Bright Colored Toucan' },
+        { id: 'photo-1480044965905-02098d419e96', name: 'Wild Robin Portrait' },
+        { id: 'photo-1551085254-e96b210db58a', name: 'Emerald Hummingbird Flight' },
+        { id: 'photo-1444464666168-49d633b86797', name: 'Exotic Passerine Perch' },
+        { id: 'photo-1452570053594-1b985d6ea890', name: 'Vibrant Macaw Pair' },
+        { id: 'photo-1606567595334-d39972c85dbe', name: 'Bright Colored Toucan' },
+        { id: 'photo-1551085254-e96b210db58a', name: 'Emerald Hummingbird' }
     ],
     cars: [
-        'photo-1503376780353-7e6692767b70','photo-1542282088-fe8426682b8f', 'photo-1552519507-da3b142c6e3d', 'photo-1580273916550-e323be2ae537'
+        { id: 'photo-1503376780353-7e6692767b70', name: 'Vintage Porsche 911' },
+        { id: 'photo-1542282088-fe8426682b8f', name: 'Modern Sports Coupé' },
+        { id: 'photo-1552519507-da3b142c6e3d', name: 'Luxury Muscle Car Profile' },
+        { id: 'photo-1580273916550-e323be2ae537', name: 'Supercar Front Intake' },
+        { id: 'photo-1617788138017-80ad40651399', name: 'Electric Concept Vehicle' },
+        { id: 'photo-1563720223185-11003d516935', name: 'Exotic Racing Hypercar' },
+        { id: 'photo-1511919884226-fd3cad34687c', name: 'Sleek Speedster Chassis' },
+        { id: 'photo-1605559424843-9e4c228bf1c2', name: 'Rugged Performance SUV' },
+        { id: 'photo-1541899481282-d53bffe3c35d', name: 'Custom Gloss Finish Drift' }
     ],
     bikes: [
-        'photo-1558981806-ec527fa84c39', 'photo-1568772585407-9361f9bf3a87',
-        'photo-1449426468159-d96dbf08f19f', 'photo-1599819811279-d5ad9cccf838', 'photo-1558981403-c5f9899a28bc'
+        { id: 'photo-1558981806-ec527fa84c39', name: 'Classic Urban Cruiser' },
+        { id: 'photo-1568772585407-9361f9bf3a87', name: 'Racing Superbike Track' },
+        { id: 'photo-1449426468159-d96dbf08f19f', name: 'Offroad Motocross Dirtbike' },
+        { id: 'photo-1599819811279-d5ad9cccf838', name: 'Custom Matte Black Chopper' },
+        { id: 'photo-1558981403-c5f9899a28bc', name: 'Vintage Garage Tracker' },
+        { id: 'photo-1485965120184-e220f721d03e', name: 'Modern Lightweight Bicycle' },
+        { id: 'photo-1532298229144-0ec0c57515c7', name: 'Sport Touring Motorcycle' },
+        { id: 'photo-1515777315835-281b94c9589f', name: 'Retro Cafe Racer' },
+        { id: 'photo-1560243563-062bfc001d68', name: 'Mountain Trail Downhill' }
     ],
     space: [
-        'photo-1451187580459-43490279c0fa', 'photo-1506318137071-a8e063b4bec0',
-        'photo-1446776811953-b23d57bd21aa', 'photo-1538370965046-79c0d6907d47', 'photo-1464802686167-b939a6910659'
+        { id: 'photo-1451187580459-43490279c0fa', name: 'Digital Network Planet' },
+        { id: 'photo-1506318137071-a8e063b4bec0', name: 'Deep Nebula Gas Cloud' },
+        { id: 'photo-1446776811953-b23d57bd21aa', name: 'Satellite Orbital Horizon' },
+        { id: 'photo-1538370965046-79c0d6907d47', name: 'Milky Way Galaxy Core' },
+        { id: 'photo-1464802686167-b939a6910659', name: 'Distant Stellar Clusters' },
+        { id: 'photo-1541185933-ef5d8ed016c2', name: 'Rocket Engine Propulsion' },
+        { id: 'photo-1614728894747-a83421e2b9c9', name: 'Lunar Surface Topography' },
+        { id: 'photo-1502134249126-9f3755a50d78', name: 'Cosmic Supernova Event' },
+        { id: 'photo-1462331940025-496dfbfc7564', name: 'Vibrant Infrared Galaxy' }
     ],
     ocean: [
-        'photo-1505118380757-91f5f5632de0', 'photo-1544551763-46a013bb70d5',
-        'photo-1518837695005-2083093ee35b', 'photo-1439066615861-d1af74d74000', 'photo-1507525428034-b723cf961d3e'
+        { id: 'photo-1505118380757-91f5f5632de0', name: 'Tropical Paradise Coast' },
+        { id: 'photo-1544551763-46a013bb70d5', name: 'Deep Sea Coral Exploration' },
+        { id: 'photo-1518837695005-2083093ee35b', name: 'Crystal Clear Wave Break' },
+        { id: 'photo-1439066615861-d1af74d74000', name: 'Dramatic Sunset Tides' },
+        { id: 'photo-1507525428034-b723cf961d3e', name: 'Sunny Beach Coastline' },
+        { id: 'photo-1546026423-cc4642628d2b', name: 'Underwater Sunbeams' },
+        { id: 'photo-1501386761578-eac5c94b800a', name: 'Vast Cerulean Horizon' },
+        { id: 'photo-1530538095376-a4936b35b5f0', name: 'Deep Oceanic Abyssal Blue' },
+        { id: 'photo-1516690561799-46d8f74f9abf', name: 'Tropical Reef Shallows' }
     ],
     mountains: [
-        'photo-1464822759023-fed622ff2c3b', 'photo-1506744038136-46273834b3fb',
-        'photo-1454496522488-7a8e488e8606', 'photo-1498050108023-c5249f4df085', 'photo-1519681393784-d120267933ba'
+        { id: 'photo-1464822759023-fed622ff2c3b', name: 'Snowcapped Peak Ridges' },
+        { id: 'photo-1506744038136-46273834b3fb', name: 'Yosemite Reflection Lake' },
+        { id: 'photo-1454496522488-7a8e488e8606', name: 'High Elevation Range' },
+        { id: 'photo-1498050108023-c5249f4df085', name: 'Misty Alpine Valley' },
+        { id: 'photo-1519681393784-d120267933ba', name: 'Starry Sky Over Dolomites' },
+        { id: 'photo-1482862549707-f63cb32c5fd9', name: 'Jagged Cinematic Cliffs' },
+        { id: 'photo-1414438992182-69e404046f80', name: 'Sunrise Crest Illumination' },
+        { id: 'photo-1461896836934-ffe607ba8211', name: 'Steep Craggy Summit' },
+        { id: 'photo-1549880338-65ddcdfd017b', name: 'Lush Green Mountain Slopes' },
+        { id: 'photo-1570077188670-e3a8d69ac5ff', name: 'Snowy Peak Panorama' }
     ],
     desert: [
-        'photo-1509316975850-ff9c5deb0cd9', 'photo-1547234935-80c7145ec969',
-        'photo-1509316785289-025f5b846b35', 'photo-1473580044384-7ba9967e16a0', 'photo-1532960401447-7dd05bef20b0'
+        { id: 'photo-1509316975850-ff9c5deb0cd9', name: 'Saguaro Cactus Sunrise' },
+        { id: 'photo-1547234935-80c7145ec969', name: 'Windswept Sand Dunes' },
+        { id: 'photo-1509316785289-025f5b846b35', name: 'Barren Mojave Roads' },
+        { id: 'photo-1473580044384-7ba9967e16a0', name: 'Golden Sun Desert Sunset' },
+        { id: 'photo-1532960401447-7dd05bef20b0', name: 'Arid Sand Canyon Formations' },
+        { id: 'photo-1534447677768-be436bb09401', name: 'Starlit Desert Sky' },
+        { id: 'photo-1517400508447-f8dd518b86db', name: 'Cracked Earth Clay Basin' },
+        { id: 'photo-1505245208761-ba872912fac0', name: 'Expansive Sahara Horizon' }
     ]
 };
 
-const gallery = document.getElementById('gallerySection');
-const filterControls = document.getElementById('filterControls');
+const gallerySection = document.getElementById('gallerySection');
+const dropdownCategories = document.getElementById('dropdownCategories');
+const slideshowContainer = document.getElementById('slideshowContainer');
+
 let images = [];
 let visibleImages = [];
+let slideIndex = 0;
 
-// Dynamically generate navigation filter buttons cleanly
+// Initialize data layers and arrays
 Object.keys(categoryImageIds).forEach(cat => {
-    let btn = document.createElement('button');
-    btn.textContent = cat;
-    btn.onclick = function() { filterGallery(cat, this); };
-    filterControls.appendChild(btn);
-});
-
-// Render layout grid tracking indices correctly
-Object.keys(categoryImageIds).forEach(cat => {
-    categoryImageIds[cat].forEach(id => {
-        let url = `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=80`;
-        images.push({ url, cat });
+    // 1. Populate standard image array item entries
+    categoryImageIds[cat].forEach(item => {
+        let url = `https://images.unsplash.com/${item.id}?auto=format&fit=crop&w=800&q=80`;
+        images.push({ url, cat, title: item.name });
     });
+
+    // 2. Build the top right category configuration dropdown menu hooks 
+    let dropLink = document.createElement('a');
+    dropLink.href = "#";
+    dropLink.textContent = cat;
+    dropLink.onclick = function(e) {
+        e.preventDefault();
+        filterGallery(cat);
+    };
+    dropdownCategories.appendChild(dropLink);
+
+    // 3. Inject slide items dynamically into the container for structural looping
+    let randomItem = categoryImageIds[cat][0]; // Uses first image from each category for slider
+    let slideUrl = `https://images.unsplash.com/${randomItem.id}?auto=format&fit=crop&w=1200&q=80`;
+    
+    let slideHtml = `
+        <div class="slide-item">
+            <img src="${slideUrl}" alt="${cat}">
+            <div class="slide-caption">
+                <h2>Category: ${cat}</h2>
+                <p>Discover stunning high-definition curation packages.</p>
+            </div>
+        </div>
+    `;
+    slideshowContainer.innerHTML += slideHtml;
 });
 
-// Initialize active view tracking
 visibleImages = [...images];
 
+// Trigger front page route switch mechanics
+function activateGalleryView() {
+    document.getElementById('landing-view').classList.add('hide');
+    const mainView = document.getElementById('main-gallery-view');
+    mainView.classList.add('show');
+    
+    // Fire render cycles once target content displays correctly
+    renderCards();
+    initSlideshow();
+}
+
+// Render layout grid displaying Titles below every image card
 function renderCards() {
-    gallery.innerHTML = '';
+    gallerySection.innerHTML = '';
     visibleImages.forEach((img, index) => {
         let card = document.createElement('div');
         card.className = 'card';
-        card.dataset.category = img.cat;
-        card.innerHTML = `<img src="${img.url}" data-index="${index}" alt="${img.cat}" loading="lazy">`;
-        gallery.appendChild(card);
+        card.innerHTML = `
+            <div class="img-container">
+                <img src="${img.url}" data-index="${index}" alt="${img.title}" loading="lazy">
+            </div>
+            <div class="card-info">
+                <div class="card-title">${img.title}</div>
+                <div class="card-tag">${img.cat}</div>
+            </div>
+        `;
+        gallerySection.appendChild(card);
     });
 }
-renderCards();
 
+// Top slideshow looping logic sequence initialization
+function initSlideshow() {
+    showSlides();
+    setInterval(showSlides, 3500); // Transitions slide every 3.5 seconds automatically
+}
+
+function showSlides() {
+    let slides = document.getElementsByClassName("slide-item");
+    if (slides.length === 0) return;
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1; }    
+    slides[slideIndex-1].style.display = "block";  
+}
+
+// Global modal view event managers
 let current = 0;
 const lightbox = document.getElementById('lightbox');
 const bigImg = document.getElementById('bigImg');
+const lightboxTitle = document.getElementById('lightboxTitle');
 
-gallery.addEventListener('click', e => {
+gallerySection.addEventListener('click', e => {
     if (e.target.tagName === 'IMG') {
         current = parseInt(e.target.dataset.index);
-        lightbox.style.display = 'flex';
-        bigImg.src = visibleImages[current].url;
+        openLightbox();
     }
 });
 
+function openLightbox() {
+    lightbox.style.display = 'flex';
+    bigImg.src = visibleImages[current].url;
+    lightboxTitle.textContent = visibleImages[current].title;
+}
+
 function closeBox() { lightbox.style.display = 'none'; }
+
 function next() {
     if(visibleImages.length === 0) return;
     current = (current + 1) % visibleImages.length;
-    bigImg.src = visibleImages[current].url;
+    openLightbox();
 }
+
 function prev() {
     if(visibleImages.length === 0) return;
     current = (current - 1 + visibleImages.length) % visibleImages.length;
-    bigImg.src = visibleImages[current].url;
+    openLightbox();
 }
 
 lightbox.addEventListener('click', (e) => {
     if(e.target === lightbox) closeBox();
 });
 
-function filterGallery(cat, btn) {
-    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
+// Category filtering system
+function filterGallery(cat) {
     document.getElementById('search').value = '';
-
     if (cat === 'all') {
         visibleImages = [...images];
     } else {
         visibleImages = images.filter(img => img.cat === cat);
     }
     renderCards();
+    
+    // Smooth auto scroll right to contents frame area
+    window.scrollTo({
+        top: slideshowContainer.offsetTop + 280,
+        behavior: 'smooth'
+    });
 }
 
+// Live Input Filter Lookups
 document.getElementById('search').addEventListener('input', function() {
     let v = this.value.toLowerCase();
-    document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
-    
-    visibleImages = images.filter(img => img.cat.includes(v));
+    visibleImages = images.filter(img => img.cat.includes(v) || img.title.toLowerCase().includes(v));
     renderCards();
 });
 </script>
